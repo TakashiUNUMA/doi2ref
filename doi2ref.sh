@@ -71,3 +71,6 @@ awk 'NR>='"${start_num}"' && NR<='"${end_num}"' {print $0}' ${TMPFILE} | \
     -e '/^$/d'                                   \
     -e 's/,<\/i>/<\/i>,/g'                       \
     -e 's|    ||g'
+
+# remove temporary file
+rm -f ${TMPFILE}
