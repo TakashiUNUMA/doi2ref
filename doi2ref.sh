@@ -3,12 +3,12 @@
 # doi2ref.sh
 #
 # descriotion: This script outputs a journal reference information from doi url. 
-#  *** American Meteorological Society's URL is only available for now ***
+#  *** American Meteorological Society's URL and Wiley's URL are only available for now ***
 #
-# version: 0.2.0
+# version: 0.2.1
 #
 # original script was coded by Takashi Unuma
-# last modified: 27th March 2017
+# last modified: 28th March 2017
 #
 
 # debug level
@@ -30,8 +30,8 @@ if test ${debug_level} -ge 100 ; then
     #URL='http://journals.ametsoc.org/action/showCitFormats?doi=10.1175%2F1520-0469%281963%29020%3C0130%3ADNF%3E2.0.CO%3B2'
     #
     # Wiley
-    URL="http://onlinelibrary.wiley.com/enhanced/exportCitation/doi/10.1002/2016JD026037"
-    #URL="http://onlinelibrary.wiley.com/enhanced/exportCitation/doi/10.1002/qj.2944"
+    #URL="http://onlinelibrary.wiley.com/enhanced/exportCitation/doi/10.1002/2016JD026037"
+    URL="http://onlinelibrary.wiley.com/enhanced/exportCitation/doi/10.1002/qj.2726"
     #
 else
     # check argument
