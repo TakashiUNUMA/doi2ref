@@ -53,6 +53,7 @@ if test ${debug_level} -ge 100 ; then
 fi
 
 # get html source from ${URL}
+# J-stage では，要 config ファイル
 w3m -dump_source ${URL} > ${TMPFILE}
 
 if test `echo ${URL} | grep "journals.ametsoc.org" | wc -l` -eq 1 ; then
