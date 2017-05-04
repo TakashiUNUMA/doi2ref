@@ -5,10 +5,10 @@
 # descriotion: This script outputs a journal reference information from doi url. 
 #  *** American Meteorological Society's URL and Wiley's URL are only available for now ***
 #
-# version: 0.2.1
+# version: 0.3.1
 #
 # original script was coded by Takashi Unuma
-# last modified: 28th March 2017
+# last modified: 5th May 2017
 #
 
 # debug level
@@ -31,7 +31,10 @@ if test ${debug_level} -ge 100 ; then
     #
     # Wiley
     #URL="http://onlinelibrary.wiley.com/enhanced/exportCitation/doi/10.1002/2016JD026037"
-    URL="http://onlinelibrary.wiley.com/enhanced/exportCitation/doi/10.1002/qj.2726"
+    #URL="http://onlinelibrary.wiley.com/enhanced/exportCitation/doi/10.1002/qj.2726"
+    #
+    # J-stage (JMSJ)
+    URL="https://www.jstage.jst.go.jp/article/jmsj/95/2/95_2017-004/_article"
     #
 else
     # check argument
@@ -51,7 +54,6 @@ fi
 
 # get html source from ${URL}
 w3m -dump_source ${URL} > ${TMPFILE}
-
 
 if test `echo ${URL} | grep "journals.ametsoc.org" | wc -l` -eq 1 ; then
     #
@@ -130,6 +132,33 @@ elif test `echo ${URL} | grep "onlinelibrary.wiley.com" | wc -l` -eq 1 ; then
     else
 	echo "*** The input wiley's URL is not supported in this script ***"
     fi
+    #
+elif test `echo ${URL} | grep "www.jstage.jst.go.jp" | wc -l` -eq 1 ; then
+    #
+    # for www.jstage.jst.go.jp
+    #
+    # check lines which is necessary for handle specific lines in the html file of out.html
+    start_num=`awk '/citation_journal_title/{print NR}' ${TMPFILE}`
+    end_num=`awk '/citation_fulltext_world_readable/{print NR - 1}' ${TMPFILE}`
+    #
+    # output reference information
+    # この時点で AMS 形式にソートすると良い (要改修)
+    tmp=`awk 'NR>='"${start_num}"' && NR<='"${end_num}"' {print $0}' ${TMPFILE} | \
+	sed -e "s/<meta\ name\=\"citation_author\"\ content\=\"//g"               \
+	    -e "s/<meta\ name\=\"citation_title\"\ content\=\"//g"                \
+	    -e "s/<meta\ name\=\"citation_volume\"\ content\=\"//g"               \
+	    -e "s/<meta\ name\=\"citation_firstpage\"\ content\=\"//g"            \
+	    -e "s/<meta\ name\=\"citation_lastpage\"\ content\=\"//g"             \
+	    -e "s/<meta\ name\=\"citation_doi\"\ content\=\"//g"                  \
+	    -e "s/<meta\ name\=\"citation_publication_date\"\ content\=\"//g"     \
+            -e "s/<meta\ name\=\"citation_journal_title\"\ content\=\"//g"        \
+            -e '/citation_author_institution/d'                                   \
+            -e '/citation_publisher/d'                                            \
+            -e '/citation_online_date/d'                                          \
+            -e '/citation_issue/d'                                                \
+            -e "s/\"\ \/>/,/g"`
+    #
+    echo ${tmp}
     #
 else
     #
