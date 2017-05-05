@@ -1,1 +1,1 @@
-ssl_verify_server OFF
+ssl_verify_server 0
